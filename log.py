@@ -1,12 +1,27 @@
 import re
-f = open("stellaris.log", "r")
-lines = f.readlines()
+import argparse
+from os import system,path
+import glob
+
+parser = argparse.ArgumentParser()
+parser.add_argument('-p', '--path',help='stellaris log path',default=f"{path.expanduser('~')}/.var/app/com.valvesoftware.Steam/.local/share/Paradox Interactive/Stellaris/crashes/")
+parser.add_argument('-d', '--depth', help='stack trace depth, 0 to disable ',default=1,type=int) #i recomend leaving it at one otherwise some errors while be double while other not
+args = parser.parse_args()
+
+lines=[]
+for file_ in glob.glob(f"{args.path}/*/exception.txt"):
+    f = open(file_, "r")
+    lines.extend(f.readlines())
+    f.close()
+
+
 errors=[]
 errors_c=[]
+
 r=False
-depth = 1
 _depth = 0
 crash_c = 0
+
 
 def error_log(fline,_depth,r):
     global crash_c
@@ -20,7 +35,7 @@ def error_log(fline,_depth,r):
         else:
             errors_c[errors.index(fline)]+=1
     
-    if _depth == depth:
+    if _depth == args.depth:
         _depth = 0
         r = False
     
