@@ -25,9 +25,15 @@ crash_c = 0
 
 def error_log(fline,_depth,r):
     global crash_c
+    if "::" in fline or ".so" in fline: # dirty bugfix for element w/o a name
+        pass
+    else:
+        return _depth, r
+    
     
     _depth += 1
     if not re.search('|'.join(["CPdxCrashReporter","libstdc++.so.6","libc.so.6", "libpops_api.so","CString::CString","std"]), line):
+        
         crash_c +=1
         if fline not in errors:
             errors.append(fline)
