@@ -1,1 +1,0 @@
-# linux-stellaris-crash-counter
